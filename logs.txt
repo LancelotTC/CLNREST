@@ -1,0 +1,4 @@
+2024/02/19 21:40:29 - GET request: 403: Unknown table: '' -> null
+2024/02/19 21:40:35 - GET request: 200:  -> {"plant":[]}
+2024/02/20 13:46:34 - GET request: 200:  -> {"plant":[]}
+2024/02/20 13:53:17 - POST request: 200: Success -> {"queryString":"insert into plant (label, latitude, longitude, growth_state_id, leaf_amount) values (:label, :latitude, :longitude, :growth_state_id, :leaf_amount)"}

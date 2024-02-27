@@ -1,4 +1,5 @@
 <?php
+header( 'Access-Control-Allow-Origin: *' );
 
 include_once "fonctions.php";
 
@@ -57,19 +58,19 @@ switch ($tables_result) {
 		array_push($param_array, "points", "growth_state_id", "leaf_amount", "quantity");
 		break;
 		
-	case 'fruit_tree':
-		$tables = array("fruit_tree" => "fruit_tree_id", );
-		array_push($param_array, "latitude", "longitude", "growth_state_id", "leaf_amount");
+	case 'tree':
+		$tables = array("tree" => "tree_id", );
+		array_push($param_array, "latitude", "longitude");
 		break;
 		
 	case 'filter':
 		$tables = array("filter" => "filter_id", );
-		array_push($param_array, "latitude", "longitude", "growth_state_id", "leaf_amount");
+		array_push($param_array, "points");
 		break;
 		
 	case 'composter':
 		$tables = array("composter" => "composter_id", );
-		array_push($param_array, "latitude", "longitude", "growth_state_id", "leaf_amount");
+		array_push($param_array, "latitude", "longitude");
 		break;
 	// case 'growth_state':
 	// 	$tables = array("growth_state", );
@@ -79,7 +80,7 @@ switch ($tables_result) {
 	case '*':
 		$tables = array(
 			"plant" => "plant_id",
-			"fruit_tree" => "fruit_tree_id",
+			"tree" => "tree_id",
 			"filter" => "filter_id",
 			"composter" => "composter_id"
 		);
@@ -88,15 +89,15 @@ switch ($tables_result) {
 	default: send_response(403, "Unknown table: '$tables_result'"); die();
 }
 
-//refers to the plain list of values to refer to when adding a model for example
+// refers to the plain list of values to refer to when adding a model for example
 // ex: column1, column2, column3
 $structure = "";
 
-//refers to the param names to bind
+// refers to the param names to bind
 // ex: :column1, :column2, :column3
 $values = "";
 
-//refers to the association of both param names and param binds
+// refers to the association of both param names and param binds
 // ex: column1 = :value1, column2 = :value2
 $structure_values = "";
 
@@ -157,7 +158,7 @@ function add_model() {
 
 	# Gets the only table and stores it in $table
 	foreach ($tables as $key_table => $_) {
-		$table = $key_table;
+	 $table = $key_table;
 		break;
 	}
 
@@ -167,8 +168,6 @@ function add_model() {
 		$request = $cnx->prepare($request);
 		$request->execute($data);
 
-
-
 		file_put_contents("logs.txt", $request->errorInfo()[2], FILE_APPEND);
 	} catch (Exception $e) {
 		send_response(500, "Invalid request: $request because $e", $cnx->lastInsertId());
@@ -177,6 +176,7 @@ function add_model() {
 
 	if ($request) {
 		$data[$table."_id"] = $cnx->lastInsertId();
+		$data["model"] = $table;
 		send_response(200, "Success", $data);
 	} else {
 		send_response(400, "Fail", $data);
@@ -222,7 +222,7 @@ function update_model() {
 	}
 
 	if ($request) {
-		send_response(200, "Success", "");
+		send_response(200, "Success", "{}");
 	} else {
 		send_response(400, "Fail", $request);
 	}
@@ -243,6 +243,7 @@ function delete_model() {
 	foreach ($tables as $key_table => $value_id_name) {
 		$table = $key_table;
 		$id_name = $value_id_name;
+		break;
 	}
 
 	$request = "delete from $table where $id_name = $id;";
@@ -255,7 +256,7 @@ function delete_model() {
 	}
 
 	if ($request) {
-		send_response(200, "Success", "");
+		send_response(200, "Success", "{}");
 	} else {
 		send_response(400, "Fail", $request);
 	}

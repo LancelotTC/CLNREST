@@ -6,10 +6,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 error_reporting(E_ERROR | E_PARSE);
 
 $request_time = date("Y/m/d H:i:s");
+
+
 file_put_contents("logs.txt", "$request_time - $method request: ", FILE_APPEND);
 
 $br = "</br>";
-
 
 
 function sanitize_text($s) {
@@ -25,10 +26,10 @@ function sanitize_int($s) {
 function send_response($code, $message, $result=null) {
 	global $method;
 	$response = array(
-		'code' => $code,
-		'method' => $method,
-		'message' => $message,
-		'result' => $result
+		'code' 		=> 	$code,
+		'method' 	=> 	$method,
+		'message' 	=> 	$message,
+		'result' 	=> 	$result
 	);
 	$result = json_encode($result);
 	file_put_contents("logs.txt", "$code: $message -> $result\n", FILE_APPEND);
@@ -47,29 +48,33 @@ $data = json_decode($_GET["data"], true);
 
 $params = '';
 
-$param_array = array("label", "latitude", "longitude");
+// $param_array = array("label", "latitude", "longitude");
+$param_array = array("id", "label");
 
 switch ($tables_result) {
 	case 'plant':
 		$tables = array("plant" => "plant_id", );
-		array_push($param_array, "growth_state_id", "leaf_amount");
+		array_push($param_array, "points", "growth_state_id", "leaf_amount", "quantity");
 		break;
 		
 	case 'fruit_tree':
 		$tables = array("fruit_tree" => "fruit_tree_id", );
+		array_push($param_array, "latitude", "longitude", "growth_state_id", "leaf_amount");
 		break;
 		
 	case 'filter':
 		$tables = array("filter" => "filter_id", );
+		array_push($param_array, "latitude", "longitude", "growth_state_id", "leaf_amount");
 		break;
 		
 	case 'composter':
 		$tables = array("composter" => "composter_id", );
+		array_push($param_array, "latitude", "longitude", "growth_state_id", "leaf_amount");
 		break;
-	case 'growth_state':
-		$tables = array("growth_state", );
-		$param_array = array("label");
-		break;
+	// case 'growth_state':
+	// 	$tables = array("growth_state", );
+	// 	$param_array = array("label");
+	// 	break;
 
 	case '*':
 		$tables = array(
@@ -121,10 +126,8 @@ $structure_values = substr($structure_values, 0, -2);
 // $latitude = sanitize_double($_GET['latitude']);
 // $longitude = sanitize_double($_GET['longitude']);
 
-
 function retrieve_models() {
 	global $cnx, $tables;
-
 
 	foreach ($tables as $key_table => $_) {
 		try {
@@ -164,20 +167,24 @@ function add_model() {
 		$request = $cnx->prepare($request);
 		$request->execute($data);
 
+
+
+		file_put_contents("logs.txt", $request->errorInfo()[2], FILE_APPEND);
 	} catch (Exception $e) {
-		send_response(500, "Invalid request: $request because $e", "");
+		send_response(500, "Invalid request: $request because $e", $cnx->lastInsertId());
 		die();
 	}
 
 	if ($request) {
-		send_response(200, "Success", $request);
+		$data[$table."_id"] = $cnx->lastInsertId();
+		send_response(200, "Success", $data);
 	} else {
 		send_response(400, "Fail", $data);
 	}
 }
 
 function update_model() {
-	global $cnx, $tables, $data, $values, $id, $br, $structure_values;
+	global $cnx, $tables, $data, $id, $br, $structure_values;
 
 	if (count($tables) != 1) {
 		send_response(403, "Incorrect number of tables: expected 1, got " . count($tables));
@@ -207,6 +214,7 @@ function update_model() {
 		}
 
 		$request->execute();
+
 		
 	} catch (Exception $e) {
 		send_response(500, "Invalid request: $request because $e", "");
@@ -214,7 +222,7 @@ function update_model() {
 	}
 
 	if ($request) {
-		send_response(200, "Success", $data);
+		send_response(200, "Success", "");
 	} else {
 		send_response(400, "Fail", $request);
 	}
@@ -247,7 +255,7 @@ function delete_model() {
 	}
 
 	if ($request) {
-		send_response(200, "Success", $request);
+		send_response(200, "Success", "");
 	} else {
 		send_response(400, "Fail", $request);
 	}

@@ -2,20 +2,21 @@
 
 function connexionPDO()
 {
-    $login = 'clnadmin';
+    $login = 'root';
     $pass = '';
     $bd = "cln";
     $server = "localhost";
-    $port = "27017";
+    $port = "3306";
 
     try {
-        return new PDO("mongo:host=$server;dbname=$bd;port=$port", $login, $pass);
+        return new PDO("mysql:host=$server;dbname=$bd;port=$port", $login, $pass);
     } catch (PDOException $e) {
         throw $e;
     }
 }
 
-$client = new MongoDB\Client("mongodb://localhost:27017");
+
+// $client = new MongoDB\Client("mongodb://localhost:27017");
 
 // $cnx = connexionPDO();
 

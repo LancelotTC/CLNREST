@@ -1,3 +1,14 @@
 <?php
 
-print_r(get_cfg_var('extension_dir'));
+
+include_once "fonctions.php";
+
+
+$client = connexionPDO();
+
+$request = $client->prepare("select growth_state_id from plant");
+
+$request->execute();
+echo implode($request->fetchAll(PDO::FETCH_ASSOC));
+// echo $request->errorInfo()[2];
+

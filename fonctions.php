@@ -2,10 +2,11 @@
 
 function connexionPDO()
 {
-    $login = 'clnadmin';
-    $pass = '';
-    $bd = "cln";
-    $server = "34.172.4.138";
+    $config = parse_ini_file("config.ini");
+    $login = $config["login"];
+    $pass = $config["pass"];
+    $bd = $config["bd"];
+    $server = $config["server"];
     $port = "3306";
 
     try {

@@ -1,3 +1,6 @@
 test.php
 logs.txt
-logs.txt
+config.ini
+.env
+httpd.conf
+php.ini

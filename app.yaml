@@ -1,1 +1,8 @@
 runtime: php
+
+env_variables:
+  CLOUD_SQL_USERNAME: clnadmin
+  CLOUD_SQL_PASSWORD: 
+  CLOUD_SQL_DATABASE_NAME: clnserver
+  CLOUD_SQL_CONNECTION_NAME: cafelumierenoire:us-central1:clnserver
+

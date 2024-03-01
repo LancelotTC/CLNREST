@@ -15,3 +15,14 @@ function connexionPDO()
         throw $e;
     }
 }
+
+$cnx = connexionPDO();
+
+$request = $cnx->prepare("select * from plant");
+$request->execute();
+
+echo 200;
+
+
+
+

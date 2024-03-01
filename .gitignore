@@ -4,3 +4,5 @@ config.ini
 .env
 httpd.conf
 php.ini
+tempCodeRunnerFile.python
+test.php

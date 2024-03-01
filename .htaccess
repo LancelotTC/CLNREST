@@ -1,26 +1,26 @@
 RewriteEngine on
-RewriteRule ^$ clnserver.php
+RewriteRule ^$ index.php
 
-RewriteRule ^(\w+|\*)$ clnserver.php?tables=$1
+RewriteRule ^(\w+|\*)$ index.php?tables=$1
 <IfModule mod_rewrite>
    RewriteCond %{REQUEST_METHOD} GET
    RewriteRule ^(\w+|\*)$ - [L]
 </IfModule>
 
 # Database ids start at 1, hence [1-9][0-9]*
-RewriteRule ^(\w+|\*)/([1-9][0-9]*)$ clnserver.php?tables=$1&id=$2
+RewriteRule ^(\w+|\*)/([1-9][0-9]*)$ index.php?tables=$1&id=$2
 <IfModule mod_rewrite>
    RewriteCond %{REQUEST_METHOD} DELETE
    RewriteRule ^(\w+|\*)/([1-9][0-9]*)$ - [L]
 </IfModule>
 
-RewriteRule ^(\w+|\*)/([1-9][0-9]*)/(\{.*\})$ clnserver.php?tables=$1&id=$2&data=$3
+RewriteRule ^(\w+|\*)/([1-9][0-9]*)/(\{.*\})$ index.php?tables=$1&id=$2&data=$3
 <IfModule mod_rewrite>
    RewriteCond %{REQUEST_METHOD} PUT
    RewriteRule ^(\w+|\*)/([1-9][0-9]*)/(\{.*\})$ - [L]
 </IfModule>
 
-RewriteRule ^(\w+|\*)/(\{.*\})$ clnserver.php?tables=$1&data=$2
+RewriteRule ^(\w+|\*)/(\{.*\})$ index.php?tables=$1&data=$2
 <IfModule mod_rewrite>
    RewriteCond %{REQUEST_METHOD} POST
    RewriteRule ^(\w+|\*)/(\{.*\})$ - [L]

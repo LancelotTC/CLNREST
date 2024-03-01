@@ -1,19 +1,11 @@
 <?php
 
 
-include_once "fonctions.php";
+$ip = getenv('HTTP_CLIENT_IP')?:
+getenv('HTTP_X_FORWARDED_FOR')?:
+getenv('HTTP_X_FORWARDED')?:
+getenv('HTTP_FORWARDED_FOR')?:
+getenv('HTTP_FORWARDED')?:
+getenv('REMOTE_ADDR');
 
-
-// $client = connexionPDO();
-
-// $request = $client->prepare("select growth_state_id from plant");
-
-// $request->execute();
-// echo implode($request->fetchAll(PDO::FETCH_ASSOC));
-// echo $request->errorInfo()[2];
-
-
-// echo json_encode($_SERVER);
-
-echo $_ENV["DATABASE_NAME"];
-$database = getenv("DATABASE_NAME");
+echo $ip;

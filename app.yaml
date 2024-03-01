@@ -1,4 +1,4 @@
-runtime: php
+runtime: php81
 
 env_variables:
   CLOUD_SQL_USERNAME: clnadmin
